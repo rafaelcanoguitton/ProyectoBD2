@@ -1,0 +1,11 @@
+id_mas dsraza edad anio_nac fch_vacuna 
+int string int int string 
+1 Raza1 8 2010 01/10/2020 
+2 Raza2 5 2010 02/10/2020 
+3 Raza3 5 2012 03/10/2020 
+4 Raza4 4 2014 04/10/2020 
+5 Raza1 3 2010 05/10/2020 
+7 Raza3 5 2010 02/10/2020 
+8 peruana 3 2015 03/10/2020 
+9 Raza1 9 2015 04/10/2020 
+10 Raza 3 2017 05/10/2020 
