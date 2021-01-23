@@ -1,20 +1,139 @@
 #include<iostream>
 #include <fstream>
+#include <vector>
+#include <bits/stdc++.h> 
 using namespace std;
 
+vector<char> abc{'A','a','B','b','C','c','D','d','E','e','F','f','G','g','H','h','I','i','J','j','K','k','L','l','M','m','N','n','O','o','P','p','Q','q','R','r','S','s','T','t','U','u','V','v','W','w','X','x','Y','y','Z','z','_','0','1','2','3','4','5','6','7','8','9'};
+class TipoInt{
+public:
+    inline bool operator()(int a, int b){return a<b;}
+};
+class TipoString{
+public:
+    inline bool operator()(string a, string b)
+    {
+        if(a.size()==b.size())
+        {
+            for(int i=0;i<a.size();i++)
+            {
+                char temp=a[i];
+                char temp2=b[i];
+                int cont1=0;
+                int cont2=0;
+                for(int j=0;j<abc.size();j++)
+                {
+                    if(temp=abc[j])
+                    {
+                        cont1=j;
+                        j=abc.size();
+                    }
+                }
+                for(int j=0;j<abc.size();j++)
+                {
+                    if(temp2=abc[j])
+                    {
+                        cont2=j;
+                        j=abc.size();
+                    }
+                }
+                if(temp>temp2)
+                {
+                    return true;
+                }
+                if(temp2>temp)
+                {
+                    return false;
+                }
+            }
+        }
+        if(a.size()>b.size())
+        {
+            for(int i=0;i<b.size();i++)
+            {
+                char temp=a[i];
+                char temp2=b[i];
+                int cont1=0;
+                int cont2=0;
+                for(int j=0;j<abc.size();j++)
+                {
+                    if(temp=abc[j])
+                    {
+                        cont1=j;
+                        j=abc.size();
+                    }
+                }
+                for(int j=0;j<abc.size();j++)
+                {
+                    if(temp2=abc[j])
+                    {
+                        cont2=j;
+                        j=abc.size();
+                    }
+                }
+                if(temp>temp2)
+                {
+                    return true;
+                }
+                if(temp2>temp)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        if(a.size()<b.size())
+        {
+            for(int i=0;i<a.size();i++)
+            {
+                char temp=a[i];
+                char temp2=b[i];
+                int cont1=0;
+                int cont2=0;
+                for(int j=0;j<abc.size();j++)
+                {
+                    if(temp=abc[j])
+                    {
+                        cont1=j;
+                        j=abc.size();
+                    }
+                }
+                for(int j=0;j<abc.size();j++)
+                {
+                    if(temp2=abc[j])
+                    {
+                        cont2=j;
+                        j=abc.size();
+                    }
+                }
+                if(temp>temp2)
+                {
+                    return true;
+                }
+                if(temp2>temp)
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+    }
+
+};
+template<class T, class C>
 class BST
 {
     struct node
     {
-        int data;
-        int dir;
+        T data;
+        vector<int> dir;
         node* left;
         node* right;
         int height;
     };
 
     node* root;
-
+    C cmp;
     void makeEmpty(node* t)
     {
         if(t == NULL)
@@ -24,33 +143,38 @@ class BST
         delete t;
     }
 
-    node* insert(int x,int y, node* t)
+    node* insert(T x,int y, node* t)
     {
         if(t == NULL)
         {
             t = new node;
             t->data = x;
-            t->dir=y;
+            t->dir.push_back(y);
             t->height = 0;
             t->left = t->right = NULL;
         }
-        else if(x < t->data)
+        else if(t->data==x)
+        {
+            t->dir.push_back(y);
+            //sort(t->dir.begin(), t->dir.end());
+        }
+        else if(cmp(x, t->data))
         {
             t->left = insert(x,y, t->left);
             if(height(t->left) - height(t->right) == 2)
             {
-                if(x < t->left->data)
+                if(cmp(x,t->left->data))
                     t = singleRightRotate(t);
                 else
                     t = doubleRightRotate(t);
             }
         }
-        else if(x > t->data)
+        else if(cmp(t->data,x))
         {
             t->right = insert(x,y, t->right);
             if(height(t->right) - height(t->left) == 2)
             {
-                if(x > t->right->data)
+                if( cmp(t->right->data,x))
                     t = singleLeftRotate(t);
                 else
                     t = doubleLeftRotate(t);
@@ -122,9 +246,9 @@ class BST
             return NULL;
 
         // Searching for element
-        else if(x < t->data)
+        else if(cmp(x,t->data))
             t->left = remove(x, t->left);
-        else if(x > t->data)
+        else if(cmp(t->data,x))
             t->right = remove(x, t->right);
 
         // Element found
@@ -201,11 +325,16 @@ class BST
             return;
         inorderFILL(t->left,filename);
         ofstream myfile(filename + ".idx", ios::app);
-        myfile << t->data << " "<<t->dir<<endl;
+        myfile << t->data;
+        for(int i=0;i<t->dir.size();i++)
+        {
+            myfile<< " "<<t->dir[i];
+        }
+        myfile<<endl;
         myfile.close();
         inorderFILL(t->right,filename);
     }
-    int searchReg(node* root,int a)
+    vector<int> searchReg(node* root,T a)
     {
         if (root == NULL || root->data == a) 
             return root->dir;
@@ -220,16 +349,16 @@ public:
         root = NULL;
     }
 
-    void insert(int x,int y)
+    void insert(T x,int y)
     {
         root = insert(x,y, root);
     }
 
-    void remove(int x)
+    void remove(T x)
     {
         root = remove(x, root);
     }
-    int searchRegi(int d)
+    vector<int> searchRegi(T d)
     {
         return searchReg(root,d);
     }

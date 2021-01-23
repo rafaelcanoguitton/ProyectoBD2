@@ -1,1 +1,2 @@
-Tb_estudiante_30000 idx-1 0
+tb_estudiante_1000 idx_Estudiante_1000 0 int id
+tb_estudiante_80000 IDX_Estudiante_80000 1 int id
